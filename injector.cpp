@@ -85,14 +85,11 @@ HANDLE Injector::setupInjector() {
             LPVOID LoadLibAddress = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
 
             CreateRemoteThread(handleToProc, NULL, 0, (LPTHREAD_START_ROUTINE)LoadLibAddress, MemAlloc, 0, NULL);
-            //WaitForSingleObject(v5, 0xFFFFFFFF);
             }
         } while (Process32Next(hSnapshot, &pe32));
       }
-      //CloseHandle(hSnapshot);
   }
-    // Cleanup the handle.
-    //CloseHandle(handleToProc);
+    // Return our process handle.
     return handleToProc;
 }
 
