@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Injector</class>
+ <widget class="QMainWindow" name="Injector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>255</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Injector</string>
+  </property>
+  <widget class="QWidget" name="InjectorWindow">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <widget class="QTextEdit" name="CodeInput">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>341</width>
+      <height>301</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="InjectCode">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Inject</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Clear">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>310</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="Menu">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>255</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="Scripts">
+    <property name="title">
+     <string>Scripts</string>
+    </property>
+    <widget class="QMenu" name="menuButtons">
+     <property name="title">
+      <string>Buttons</string>
+     </property>
+     <addaction name="actionTeam_Legend"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="PhaseCheck"/>
+    <addaction name="menuButtons"/>
+   </widget>
+   <widget class="QMenu" name="About">
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="Scripts"/>
+   <addaction name="About"/>
+  </widget>
+  <widget class="QStatusBar" name="StatusBar"/>
+  <action name="PhaseCheck">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Skip Phase Check</string>
+   </property>
+  </action>
+  <action name="actionTeam_Legend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Team Legend</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
