@@ -36,6 +36,8 @@ private slots:
 
     void on_actionGlobal_Teleport_triggered(bool checked);
 
+    void on_actionQuit_triggered();
+
 private:
     Ui::Injector *ui;
 };

@@ -3,7 +3,6 @@
 #include "injector.h"
 #include "ui_injector.h"
 #include <QMessageBox>
-#include <QtConcurrent/QtConcurrent>
 
 #include <string.h>
 #include <windows.h>
@@ -16,13 +15,13 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdlib.h>
-#include <thread>
 #include <Scripts.h>
 
 // Libraries to be linked into the executable.
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
+#pragma comment(lib, "user32.lib")
 
 // The name of our injector DLL.
 const char* DLL_NAME = "C:\\Program Files (x86)\\Disney\\Disney Online\\ToontownOnline\\pyloader.dll";
@@ -78,7 +77,7 @@ HANDLE Injector::setupInjector() {
             printf("\nretVal - %d\n", retVal);
 
             if (retVal == 0) {
-              // HOW
+              // Display the error message.
               PrintLastErrorMsg();
             }
   
@@ -240,4 +239,17 @@ void Injector::on_actionDance_triggered(bool checked)
 void Injector::on_actionGlobal_Teleport_triggered(bool checked)
 {
     this->sendPythonPayload(globalTeleport);
+}
+
+void Injector::on_actionQuit_triggered()
+{
+    // Close our running Toontown process.
+    DWORD pid = NULL;
+    HWND hWnd = FindWindow(NULL, QString("Toontown").toStdWString().c_str());
+    GetWindowThreadProcessId(hWnd, &pid);
+    HANDLE handle = OpenProcess(SYNCHRONIZE | PROCESS_TERMINATE, TRUE, pid);
+    TerminateProcess(handle, NULL);
+
+    // Close the injector.
+    QCoreApplication::quit();
 }

@@ -104,6 +104,7 @@
      <string>Misc</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="Scripts"/>
    <addaction name="Misc"/>
@@ -160,6 +161,11 @@
    </property>
    <property name="text">
     <string>Global Teleport</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
    </property>
   </action>
  </widget>

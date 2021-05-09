@@ -137,7 +137,8 @@ DWORD WINAPI LoaderMain(LPVOID lpParam) {
   PyRun_SimpleStringFlags(hax, NULL);
   PyGILState_Release(state);
   std::cout << "Done!\n";
-  
+  FreeLibraryAndExitThread((HMODULE)lpParam, 0);
+
   return TRUE;
 }
 
