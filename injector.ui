@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>400</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -78,19 +78,35 @@
       <string>Tools</string>
      </property>
      <addaction name="actionBytecode_Extract"/>
+     <addaction name="PhaseCheck"/>
+    </widget>
+    <widget class="QMenu" name="menuAnimations">
+     <property name="title">
+      <string>Animations</string>
+     </property>
+     <addaction name="actionDance"/>
+     <addaction name="actionFast_Dance"/>
+    </widget>
+    <widget class="QMenu" name="menuCheats">
+     <property name="title">
+      <string>Cheats</string>
+     </property>
+     <addaction name="actionGlobal_Teleport"/>
     </widget>
     <addaction name="separator"/>
-    <addaction name="PhaseCheck"/>
     <addaction name="menuButtons"/>
     <addaction name="menuTools"/>
+    <addaction name="menuAnimations"/>
+    <addaction name="menuCheats"/>
    </widget>
-   <widget class="QMenu" name="About">
+   <widget class="QMenu" name="Misc">
     <property name="title">
-     <string>About</string>
+     <string>Misc</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="Scripts"/>
-   <addaction name="About"/>
+   <addaction name="Misc"/>
   </widget>
   <widget class="QStatusBar" name="StatusBar"/>
   <action name="PhaseCheck">
@@ -115,6 +131,35 @@
    </property>
    <property name="text">
     <string>Extract Bytecode</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionDance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dance</string>
+   </property>
+  </action>
+  <action name="actionFast_Dance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fast Dance</string>
+   </property>
+  </action>
+  <action name="actionGlobal_Teleport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Global Teleport</string>
    </property>
   </action>
  </widget>

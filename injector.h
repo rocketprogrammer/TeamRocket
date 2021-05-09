@@ -28,6 +28,14 @@ private slots:
 
     void on_actionBytecode_Extract_triggered();
 
+    void on_actionAbout_triggered();
+
+    void on_actionFast_Dance_triggered(bool checked);
+
+    void on_actionDance_triggered(bool checked);
+
+    void on_actionGlobal_Teleport_triggered(bool checked);
+
 private:
     Ui::Injector *ui;
 };

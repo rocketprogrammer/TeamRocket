@@ -100,13 +100,12 @@ Injector::~Injector()
 
 int Injector::on_PhaseCheck_triggered()
 {
-    // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     int retVal = this->sendPythonPayload(skipPhaseChk);
     return retVal;
 }
 
 int Injector::sendPythonPayload(const char* text) {
-
+    // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
@@ -196,7 +195,6 @@ int Injector::on_InjectCode_clicked()
     std::string str = text.toStdString();
     const char* p = str.c_str();
 
-    // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     int retVal = this->sendPythonPayload(p);
     return retVal;
 }
@@ -208,12 +206,38 @@ void Injector::on_Clear_clicked()
 
 void Injector::on_actionTeam_Legend_triggered()
 {
-    // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     this->sendPythonPayload(teamLegendButtons);
 }
 
 void Injector::on_actionBytecode_Extract_triggered()
 {
-    // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     this->sendPythonPayload(extractBytecode);
+}
+void Injector::on_actionAbout_triggered()
+{
+    QMessageBox::information( 
+        this, 
+        tr("Python Injector"), 
+        tr("We love PyRun_SimpleStringFlags!\nWritten by Rocket.") );
+}
+
+void Injector::on_actionFast_Dance_triggered(bool checked)
+{
+    if (checked) {
+        this->sendPythonPayload(fastDanceAnim);
+    } else {
+        this->sendPythonPayload(neutralAnim);
+    }
+}
+void Injector::on_actionDance_triggered(bool checked)
+{
+    if (checked) {
+        this->sendPythonPayload(danceAnim);
+     } else {
+         this->sendPythonPayload(neutralAnim);
+    }
+}
+void Injector::on_actionGlobal_Teleport_triggered(bool checked)
+{
+    this->sendPythonPayload(globalTeleport);
 }

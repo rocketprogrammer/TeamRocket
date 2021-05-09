@@ -43,3 +43,23 @@ response = urllib.urlopen('http://download.sunrise.games/hax/Bytecode/Extract.tx
 code = response.read()
 exec(code)
 )";
+
+inline const char *fastDanceAnim = R"(
+base.localAvatar.b_setAnimState('victory', 10)
+)";
+
+inline const char *neutralAnim = R"(
+base.localAvatar.b_setAnimState('neutral', 1)
+)";
+
+inline const char *danceAnim = R"(
+base.localAvatar.b_setAnimState('victory')
+)";
+
+// TODO: Restore original teleport access.
+inline const char *globalTeleport = R"(
+from toontown.toonbase import ToontownGlobals
+
+base.localAvatar.setTeleportAccess(ToontownGlobals.HoodsForTeleportAll)
+base.localAvatar.setHoodsVisited(ToontownGlobals.HoodsForTeleportAll)  
+)";
