@@ -26,6 +26,8 @@ private slots:
     void on_Clear_clicked();
     void on_actionTeam_Legend_triggered();
 
+    void on_actionBytecode_Extract_triggered();
+
 private:
     Ui::Injector *ui;
 };

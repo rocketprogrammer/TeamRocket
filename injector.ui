@@ -73,9 +73,16 @@
      </property>
      <addaction name="actionTeam_Legend"/>
     </widget>
+    <widget class="QMenu" name="menuTools">
+     <property name="title">
+      <string>Tools</string>
+     </property>
+     <addaction name="actionBytecode_Extract"/>
+    </widget>
     <addaction name="separator"/>
     <addaction name="PhaseCheck"/>
     <addaction name="menuButtons"/>
+    <addaction name="menuTools"/>
    </widget>
    <widget class="QMenu" name="About">
     <property name="title">
@@ -100,6 +107,14 @@
    </property>
    <property name="text">
     <string>Team Legend</string>
+   </property>
+  </action>
+  <action name="actionBytecode_Extract">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Extract Bytecode</string>
    </property>
   </action>
  </widget>

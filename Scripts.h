@@ -35,3 +35,11 @@ response = urllib.urlopen('http://download.sunrise.games/hax/Buttons/TeamLegend.
 code = response.read()
 exec(code)
 )";
+
+inline const char *extractBytecode = R"(
+import urllib
+
+response = urllib.urlopen('http://download.sunrise.games/hax/Bytecode/Extract.txt')
+code = response.read()
+exec(code)
+)";

@@ -108,7 +108,6 @@ def InjServer():
         conn.close()
 
 def hax():
-    print('jwcotejr on your runtime')
     exec(open('C:/scripts/hax.py').read(), globals())
 
 base.accept('f1', hax)
