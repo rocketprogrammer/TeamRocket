@@ -217,4 +217,3 @@ void Injector::on_actionBytecode_Extract_triggered()
     // While this works, ideally we'd be calling PyRun_SimpleStringFlags instead.
     this->sendPythonPayload(extractBytecode);
 }
-
