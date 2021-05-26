@@ -104,6 +104,7 @@
      <string>Misc</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionDiscord_Presence"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="Scripts"/>
@@ -166,6 +167,14 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionDiscord_Presence">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Discord Presence</string>
    </property>
   </action>
  </widget>

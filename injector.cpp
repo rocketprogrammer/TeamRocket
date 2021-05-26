@@ -253,3 +253,17 @@ void Injector::on_actionQuit_triggered()
     // Close the injector.
     QCoreApplication::quit();
 }
+void Injector::on_actionDiscord_Presence_triggered(bool checked)
+{
+    if (checked) {
+        // Run the Discord Presence executable.
+        system("discord/DiscordPresence.exe");
+     } else {
+         // Close our running Discord Presence process.
+         DWORD pid = NULL;
+         HWND hWnd = FindWindow(NULL, QString("DiscordPresence.exe").toStdWString().c_str());
+         GetWindowThreadProcessId(hWnd, &pid);
+         HANDLE handle = OpenProcess(SYNCHRONIZE | PROCESS_TERMINATE, TRUE, pid);
+         TerminateProcess(handle, NULL);
+    }
+}

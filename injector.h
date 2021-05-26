@@ -38,6 +38,8 @@ private slots:
 
     void on_actionQuit_triggered();
 
+    void on_actionDiscord_Presence_triggered(bool checked);
+
 private:
     Ui::Injector *ui;
 };
