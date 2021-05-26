@@ -24,7 +24,7 @@
 #pragma comment(lib, "user32.lib")
 
 // The name of our injector DLL.
-const char* DLL_NAME = "C:\\Program Files (x86)\\Disney\\Disney Online\\ToontownOnline\\pyloader.dll";
+const char* DLL_NAME = "C:\\libraries\\pyloader.dll";
 
 // The buffer length and port for our socket connection.
 #define DEFAULT_BUFLEN 512
@@ -67,7 +67,7 @@ HANDLE Injector::setupInjector() {
 
       if (Process32First(hSnapshot, &pe32)) {
         do {
-          if(!wcscmp(pe32.szExeFile, L"Toontown.exe")) {
+          if(!wcscmp(pe32.szExeFile, L"Pirates_Online.exe")) {
             std::wcout << "processID: " << pe32.th32ProcessID;
 
             handleToProc = OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, pe32.th32ProcessID);
