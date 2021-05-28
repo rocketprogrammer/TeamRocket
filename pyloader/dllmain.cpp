@@ -28,6 +28,9 @@ T GetFunctionPtr(HMODULE module, const char* name) {
 typedef int (*PTR_PyRun_SimpleStringFlags)(const char* command, void* flags);
 PTR_PyRun_SimpleStringFlags PyRun_SimpleStringFlags = NULL;
 
+typedef int (*PTR_PyRun_SimpleString)(const char* command);
+PTR_PyRun_SimpleString PyRun_SimpleString = NULL;
+
 typedef void* (*PTR_PyRun_String)(const char* str,
                                   int start,
                                   void* globals,
@@ -60,58 +63,24 @@ DLL_EXPORT bool executeCode(const char *code) {
     return FALSE;
   }
 
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleString))) {
+    return FALSE;
+  }
+
   if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String))) {
     return FALSE;
   }
 
-  // GIL
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure))) {
-    return FALSE;
-  }
-
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release))) {
-    return FALSE;
-  }
-
-  PyGILState_STATE state = PyGILState_Ensure();
   PyRun_SimpleStringFlags(code, NULL);
-  PyGILState_Release(state);
 
   return TRUE;
 }
 
 const char *hax = R"(
-from threading import Thread
-import socket
-
-def InjServer():
-    HOST = '0.0.0.0'
-    PORT = 1337
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((HOST, PORT))
-    s.listen(10)
-
-    while True:
-        conn, addr = s.accept()
-        data = conn.recv(4096)
-
-        if not data:
-            break
-
-        try:
-            exec(data, globals())
-        except:
-            import traceback
-            traceback.print_exc()
-
-        conn.close()
-
 def hax():
     exec(open('C:/scripts/hax.py').read(), globals())
 
 base.accept('f1', hax)
-Thread(target = InjServer).start()
 )";
 
 DWORD WINAPI LoaderMain(LPVOID lpParam) {
@@ -119,23 +88,16 @@ DWORD WINAPI LoaderMain(LPVOID lpParam) {
     return FALSE;
   }
 
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleString))) {
+    return FALSE;
+  }
+
   if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String))) {
     return FALSE;
   }
 
-  // GIL
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure))) {
-    return FALSE;
-  }
-
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release))) {
-    return FALSE;
-  }
-
-  PyGILState_STATE state = PyGILState_Ensure();
   std::cout << "Setting up injector...\n";
-  PyRun_SimpleStringFlags(hax, NULL);
-  PyGILState_Release(state);
+  PyRun_SimpleString(hax);
   std::cout << "Done!\n";
   FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 
@@ -145,8 +107,8 @@ DWORD WINAPI LoaderMain(LPVOID lpParam) {
 BOOL APIENTRY DllMain(HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved) {
   switch (dwReason) {
     case DLL_PROCESS_ATTACH: {
-      if (!(g_PythonDLL = GetModuleHandleA("python24.dll"))) {
-        MessageBoxA(NULL, "Could not load python24.dll!", "Error",
+      if (!(g_PythonDLL = GetModuleHandleA("python22.dll"))) {
+        MessageBoxA(NULL, "Could not load python22.dll!", "Error",
                     MB_ICONERROR);
         return FALSE;
       }
