@@ -24,7 +24,7 @@
 #pragma comment(lib, "user32.lib")
 
 // The name of our injector DLL.
-const char* DLL_NAME = "C:\\Program Files (x86)\\Disney\\Disney Online\\ToontownOnline\\pyloader.dll";
+const char* DLL_NAME = "D:\\Games\\Disney\\Disney Online\\ToontownOnline_TEST\\pyloader.dll";
 
 // The buffer length and port for our socket connection.
 #define DEFAULT_BUFLEN 512
