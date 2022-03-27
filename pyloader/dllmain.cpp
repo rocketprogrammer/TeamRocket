@@ -94,7 +94,7 @@ def InjServer():
 
     while True:
         conn, addr = s.accept()
-        data = conn.recv(4096)
+        data = conn.recv(16384)
 
         if not data:
             break
