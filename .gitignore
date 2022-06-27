@@ -3,3 +3,4 @@ build-*
 pyloader/.vs/*
 pyloader/Debug/*
 pyloader/Release/*
+pyloader/x64/*

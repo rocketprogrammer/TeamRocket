@@ -35,10 +35,10 @@ void PrintLastErrorMsg() {
    DWORD errnum = GetLastError();
    FormatMessage(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                NULL, 
-                errnum, 
+                NULL,
+                errnum,
                 LANG_NEUTRAL,
-                (LPTSTR)&pTmp, 
+                (LPTSTR)&pTmp,
                 0,
                 NULL
                 );
@@ -72,7 +72,7 @@ HANDLE Injector::setupInjector() {
 
             handleToProc = OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, pe32.th32ProcessID);
             LPVOID MemAlloc = VirtualAllocEx(handleToProc, NULL, strlen(DLL_NAME) + 1, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-    
+
             int retVal = WriteProcessMemory(handleToProc, MemAlloc, DLL_NAME, strlen(DLL_NAME) + 1, NULL);
             printf("\nretVal - %d\n", retVal);
 
@@ -80,7 +80,7 @@ HANDLE Injector::setupInjector() {
               // Display the error message.
               PrintLastErrorMsg();
             }
-  
+
             LPVOID LoadLibAddress = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
 
             CreateRemoteThread(handleToProc, NULL, 0, (LPTHREAD_START_ROUTINE)LoadLibAddress, MemAlloc, 0, NULL);
@@ -136,7 +136,7 @@ int Injector::sendPythonPayload(const char* text) {
     for(ptr=result; ptr != NULL ;ptr=ptr->ai_next) {
 
         // Create a SOCKET for connecting to server
-        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype, 
+        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
             ptr->ai_protocol);
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %ld\n", WSAGetLastError());
@@ -214,9 +214,9 @@ void Injector::on_actionBytecode_Extract_triggered()
 }
 void Injector::on_actionAbout_triggered()
 {
-    QMessageBox::information( 
-        this, 
-        tr("Python Injector"), 
+    QMessageBox::information(
+        this,
+        tr("Python Injector"),
         tr("We love PyRun_SimpleStringFlags!\nWritten by Rocket.") );
 }
 
