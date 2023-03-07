@@ -84,7 +84,18 @@ const char *hax = R"(
 from threading import Thread
 import socket
 
-def InjServer():
+def recvall(sock):
+    BUFF_SIZE = 4096 # 4 KiB
+    data = ''
+    while True:
+        part = sock.recv(BUFF_SIZE)
+        data += part
+        if len(part) < BUFF_SIZE:
+            # either 0 or end of data
+            break
+    return data
+
+def server():
     HOST = '0.0.0.0'
     PORT = 1337
 
@@ -94,7 +105,7 @@ def InjServer():
 
     while True:
         conn, addr = s.accept()
-        data = conn.recv(16384)
+        data = recvall(conn)
 
         if not data:
             break
@@ -111,7 +122,7 @@ def hax():
     exec(open('C:/scripts/hax.py').read(), globals())
 
 base.accept('f1', hax)
-Thread(target = InjServer).start()
+Thread(target=server).start()
 )";
 
 DWORD WINAPI LoaderMain(LPVOID lpParam) {
