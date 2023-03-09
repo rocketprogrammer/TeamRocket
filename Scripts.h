@@ -61,5 +61,5 @@ inline const char *globalTeleport = R"(
 from toontown.toonbase import ToontownGlobals
 
 base.localAvatar.setTeleportAccess(ToontownGlobals.HoodsForTeleportAll)
-base.localAvatar.setHoodsVisited(ToontownGlobals.HoodsForTeleportAll)  
+base.localAvatar.setHoodsVisited(ToontownGlobals.HoodsForTeleportAll)
 )";

@@ -1,6 +1,5 @@
-build-*
 *.user
-pyloader/.vs/*
-pyloader/Debug/*
-pyloader/Release/*
-pyloader/x64/*
+.vs/
+Debug
+Release
+x64
