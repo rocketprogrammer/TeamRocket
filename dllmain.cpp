@@ -183,22 +183,23 @@ LRESULT CreateInjectWindows(HWND hWndParent, UINT Msg, WPARAM wParam, LPARAM lPa
   return DefWindowProcA(hWndParent, Msg, wParam, lParam);
 }
 
-BOOL CreateInjectClass() {
-	WNDCLASSEXA InjectClass;
+BOOL CreateInjectClass()
+{
+  WNDCLASSEXA InjectClass;
 
-	InjectClass.cbSize = sizeof(WNDCLASSEX);
-	InjectClass.style = CS_DBLCLKS;
-	InjectClass.lpfnWndProc = (WNDPROC)CreateInjectWindows;
-	InjectClass.cbClsExtra = 0;
-	InjectClass.cbWndExtra = 0;
-	InjectClass.hInstance = (HINSTANCE)MainHInstance;
-	InjectClass.hIcon = LoadIconA(0, (LPCSTR)0x7F00);
-	InjectClass.hCursor = LoadCursorA(0, (LPCSTR)0x7F00);
-	InjectClass.hbrBackground = (HBRUSH)COLOR_WINDOWFRAME;
-	InjectClass.lpszMenuName = 0;
-	InjectClass.lpszClassName = "InjectClass";
-	InjectClass.hIconSm = LoadIconA(0, (LPCSTR)0x7F00);
-	return RegisterClassExA(&InjectClass) != 0;
+  InjectClass.cbSize = sizeof(WNDCLASSEX);
+  InjectClass.style = CS_DBLCLKS;
+  InjectClass.lpfnWndProc = (WNDPROC)CreateInjectWindows;
+  InjectClass.cbClsExtra = 0;
+  InjectClass.cbWndExtra = 0;
+  InjectClass.hInstance = (HINSTANCE)MainHInstance;
+  InjectClass.hIcon = LoadIconA(0, (LPCSTR)0x7F00);
+  InjectClass.hCursor = LoadCursorA(0, (LPCSTR)0x7F00);
+  InjectClass.hbrBackground = (HBRUSH)COLOR_WINDOWFRAME;
+  InjectClass.lpszMenuName = 0;
+  InjectClass.lpszClassName = "InjectClass";
+  InjectClass.hIconSm = LoadIconA(0, (LPCSTR)0x7F00);
+  return RegisterClassExA(&InjectClass) != 0;
 }
 
 DWORD StartInjector(LPVOID lpThreadParameter)
