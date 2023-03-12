@@ -9,9 +9,11 @@
 #include <iomanip>
 
 template <typename T>
-T GetFunctionPtr(HMODULE module, const char* name) {
+T GetFunctionPtr(HMODULE module, const char *name)
+{
   T func = (T)GetProcAddress(module, name);
-  if (NULL == func) {
+  if (NULL == func)
+  {
     std::cout << "An error occured! Could not find " << name << "!"
               << std::endl;
   }
@@ -25,13 +27,13 @@ T GetFunctionPtr(HMODULE module, const char* name) {
 //---------------------------------------------------------
 // Typedefs
 
-typedef int (*PTR_PyRun_SimpleStringFlags)(const char* command, void* flags);
+typedef int (*PTR_PyRun_SimpleStringFlags)(const char *command, void *flags);
 PTR_PyRun_SimpleStringFlags PyRun_SimpleStringFlags = NULL;
 
-typedef void* (*PTR_PyRun_String)(const char* str,
+typedef void *(*PTR_PyRun_String)(const char *str,
                                   int start,
-                                  void* globals,
-                                  void* locals);
+                                  void *globals,
+                                  void *locals);
 PTR_PyRun_String PyRun_String = NULL;
 
 // Thread stuff
@@ -39,7 +41,11 @@ typedef void (*PTR_PyEval_InitThreads)();
 PTR_PyEval_InitThreads PyEval_InitThreads = NULL;
 
 // Global Interpreter Lock (GIL)
-enum PyGILState_STATE { PyGILState_LOCKED, PyGILState_UNLOCKED };
+enum PyGILState_STATE
+{
+  PyGILState_LOCKED,
+  PyGILState_UNLOCKED
+};
 
 typedef enum PyGILState_STATE (*PTR_PyGILState_Ensure)(void);
 PTR_PyGILState_Ensure PyGILState_Ensure = NULL;
@@ -47,29 +53,36 @@ PTR_PyGILState_Ensure PyGILState_Ensure = NULL;
 typedef void (*PTR_PyGILState_Release)(enum PyGILState_STATE);
 PTR_PyGILState_Release PyGILState_Release = NULL;
 
-//#define Py_file_input 257
-//#define Py_eval_input 258
+// #define Py_file_input 257
+// #define Py_eval_input 258
 
 HMODULE g_PythonDLL = NULL;
-LPDWORD g_ThreadID 	= NULL;
+
+HINSTANCE MainHInstance;
+HANDLE CurrentProcess;
 
 #define DLL_EXPORT extern "C" __declspec(dllexport)
 
-DLL_EXPORT bool executeCode(const char *code) {
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleStringFlags))) {
+DLL_EXPORT bool executeCode(const char *code)
+{
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleStringFlags)))
+  {
     return FALSE;
   }
 
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String)))
+  {
     return FALSE;
   }
 
   // GIL
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure)))
+  {
     return FALSE;
   }
 
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release)))
+  {
     return FALSE;
   }
 
@@ -80,106 +93,167 @@ DLL_EXPORT bool executeCode(const char *code) {
   return TRUE;
 }
 
-const char *hax = R"(
-from threading import Thread
-import socket
-
-def recvall(sock):
-    BUFF_SIZE = 4096 # 4 KiB
-    data = ''
-    while True:
-        part = sock.recv(BUFF_SIZE)
-        data += part
-        if len(part) < BUFF_SIZE:
-            # either 0 or end of data
-            break
-    return data
-
-def server():
-    HOST = '0.0.0.0'
-    PORT = 1337
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((HOST, PORT))
-    s.listen(10)
-
-    while True:
-        conn, addr = s.accept()
-        data = recvall(conn)
-
-        if not data:
-            break
-
-        try:
-            exec(data, globals())
-        except:
-            import traceback
-            traceback.print_exc()
-
-        conn.close()
-
-def hax():
-    exec(open('C:/scripts/hax.py').read(), globals())
-
-base.accept('f1', hax)
-Thread(target=server).start()
-)";
-
-DWORD WINAPI LoaderMain(LPVOID lpParam) {
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleStringFlags))) {
+bool Initialize()
+{
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_SimpleStringFlags)))
+  {
     return FALSE;
   }
 
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyRun_String)))
+  {
     return FALSE;
   }
 
   // GIL
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Ensure)))
+  {
     return FALSE;
   }
 
-  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release))) {
+  if (!(GET_FUNC_PTR(g_PythonDLL, PyGILState_Release)))
+  {
     return FALSE;
   }
+};
 
+void InjectCode(char *payload)
+{
   PyGILState_STATE state = PyGILState_Ensure();
-  std::cout << "Setting up injector...\n";
-  PyRun_SimpleStringFlags(hax, NULL);
-  PyGILState_Release(state);
-  std::cout << "Done!\n";
-  FreeLibraryAndExitThread((HMODULE)lpParam, 0);
 
-  return TRUE;
+  PyRun_SimpleStringFlags(payload, NULL);
+  PyGILState_Release(state);
+};
+
+LRESULT CreateInjectWindows(HWND hWndParent, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+  HMODULE ModuleHandle;
+  HWND InjectTextWindowhWnd;
+  HWND SubmitCodehWnd;
+
+  // These are the ids for our sub menus.
+  int SubmitCodeButtonId = 1;
+  int InjectTextWindowId = 2;
+
+  char String[65536];
+
+  switch (Msg)
+  {
+  case 1:
+    // Get our module handle.
+    ModuleHandle = GetModuleHandleA(0);
+
+    // Create our sumbit injection code button.
+    SubmitCodehWnd = CreateWindowExA(0, "Button", "Submit Code", 0x50000001, 0, 250, 500, 250, hWndParent, (HMENU)SubmitCodeButtonId, ModuleHandle, 0);
+
+    // Create our text window so users can input code to inject,
+    InjectTextWindowhWnd = CreateWindowExA(0, "Edit", "# Welcome to the Team Rocket Python Injector! #", 0x50300004, 0, 0, 500, 250, hWndParent, (HMENU)InjectTextWindowId, ModuleHandle, 0);
+
+    // Show both of the windows we created.
+    ShowWindow(SubmitCodehWnd, 1);
+    ShowWindow(InjectTextWindowhWnd, 1);
+
+  case 273:
+    if (wParam != 1)
+    {
+      return 0;
+    }
+
+    // Get our code to compile and inject from our text window.
+    GetDlgItemTextA(hWndParent, InjectTextWindowId, String, 100000);
+
+    // Perform our python injection with our code to inject.
+    InjectCode(String);
+
+    // Show a message box containing the code we injected.
+    MessageBoxA(0, String, nullptr, 0);
+
+    return 0;
+
+  case 2:
+    PostQuitMessage(0);
+
+  case 16:
+    return 0;
+
+  default:
+    return DefWindowProcA(hWndParent, Msg, wParam, lParam);
+  }
+
+  return DefWindowProcA(hWndParent, Msg, wParam, lParam);
 }
 
-BOOL APIENTRY DllMain(HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved) {
-  switch (dwReason) {
-    case DLL_PROCESS_ATTACH: {
-      if (!(g_PythonDLL = GetModuleHandleA("python24.dll"))) {
-        MessageBoxA(NULL, "Could not load python24.dll!", "Error",
-                    MB_ICONERROR);
-        return FALSE;
-      }
+BOOL CreateInjectClass() {
+	WNDCLASSEXA InjectClass;
 
-      PyEval_InitThreads = (PTR_PyEval_InitThreads)GetProcAddress(
-          g_PythonDLL, "PyEval_InitThreads");
-      if (!PyEval_InitThreads) {
-        MessageBoxA(NULL,
-                    "An error occured! Could not find PyEval_InitThreads!",
-                    "Error", MB_ICONERROR);
-        return FALSE;
-      }
+	InjectClass.cbSize = sizeof(WNDCLASSEX);
+	InjectClass.style = CS_DBLCLKS;
+	InjectClass.lpfnWndProc = (WNDPROC)CreateInjectWindows;
+	InjectClass.cbClsExtra = 0;
+	InjectClass.cbWndExtra = 0;
+	InjectClass.hInstance = (HINSTANCE)MainHInstance;
+	InjectClass.hIcon = LoadIconA(0, (LPCSTR)0x7F00);
+	InjectClass.hCursor = LoadCursorA(0, (LPCSTR)0x7F00);
+	InjectClass.hbrBackground = (HBRUSH)COLOR_WINDOWFRAME;
+	InjectClass.lpszMenuName = 0;
+	InjectClass.lpszClassName = "InjectClass";
+	InjectClass.hIconSm = LoadIconA(0, (LPCSTR)0x7F00);
+	return RegisterClassExA(&InjectClass) != 0;
+}
 
-      // This must be called in main thread!
-      PyEval_InitThreads();
+DWORD StartInjector(LPVOID lpThreadParameter)
+{
+  HWND Window;
+  struct tagMSG Msg;
 
-      CreateThread(NULL, 0, LoaderMain, 0, 0, g_ThreadID);
-      break;
+  Initialize();
+  CreateInjectClass();
+
+  Window = CreateWindowExA(0, "InjectClass", "Python Injector", 0xCF0000u, 0x80000000, 0x80000000, 516, 538, 0, 0, 0, 0);
+  ShowWindow(Window, 1);
+
+  while (GetMessageA(&Msg, 0, 0, 0))
+  {
+    TranslateMessage(&Msg);
+    DispatchMessageA(&Msg);
+  }
+
+  return 1;
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+{
+  switch (ul_reason_for_call)
+  {
+  case DLL_PROCESS_ATTACH:
+  {
+    if (!(g_PythonDLL = GetModuleHandleA("python24.dll")))
+    {
+      MessageBoxA(NULL, "Could not load python24.dll!", "Error",
+                  MB_ICONERROR);
+      return FALSE;
     }
-    case DLL_PROCESS_DETACH: {
-      break;
+
+    PyEval_InitThreads = (PTR_PyEval_InitThreads)GetProcAddress(
+        g_PythonDLL, "PyEval_InitThreads");
+    if (!PyEval_InitThreads)
+    {
+      MessageBoxA(NULL,
+                  "An error occured! Could not find PyEval_InitThreads!",
+                  "Error", MB_ICONERROR);
+      return FALSE;
     }
+
+    // This must be called in main thread!
+    PyEval_InitThreads();
+
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)StartInjector, 0, 0, 0);
+    break;
+  }
+  case DLL_PROCESS_DETACH:
+  {
+    break;
+  }
   }
 
   return TRUE;
