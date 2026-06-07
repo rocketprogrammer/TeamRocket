@@ -1,4 +1,19 @@
-inline const char *skipPhaseChk = R"(
+#pragma once
+
+struct Script
+{
+    const char* name;
+    const char* code;
+};
+
+struct ScriptCategory
+{
+    const char* name;
+    const Script* scripts;
+    int count;
+};
+
+inline const char* skipPhaseChk = R"(
 phases = [
     1,
     2,
@@ -28,7 +43,7 @@ def resumeInstall():
 launcher.resumeInstall = resumeInstall
 )";
 
-inline const char *teamLegendButtons = R"(
+inline const char* teamLegendButtons = R"(
 import urllib
 
 response = urllib.urlopen('http://download.sunrise.games/hax/Buttons/TeamLegend.txt')
@@ -36,7 +51,7 @@ code = response.read()
 exec(code)
 )";
 
-inline const char *extractBytecode = R"(
+inline const char* extractBytecode = R"(
 import urllib
 
 response = urllib.urlopen('http://download.sunrise.games/hax/Bytecode/Extract.txt')
@@ -44,22 +59,50 @@ code = response.read()
 exec(code)
 )";
 
-inline const char *fastDanceAnim = R"(
+inline const char* fastDanceAnim = R"(
 base.localAvatar.b_setAnimState('victory', 10)
 )";
 
-inline const char *neutralAnim = R"(
+inline const char* neutralAnim = R"(
 base.localAvatar.b_setAnimState('neutral', 1)
 )";
 
-inline const char *danceAnim = R"(
+inline const char* danceAnim = R"(
 base.localAvatar.b_setAnimState('victory')
 )";
 
 // TODO: Restore original teleport access.
-inline const char *globalTeleport = R"(
+inline const char* globalTeleport = R"(
 from toontown.toonbase import ToontownGlobals
 
 base.localAvatar.setTeleportAccess(ToontownGlobals.HoodsForTeleportAll)
 base.localAvatar.setHoodsVisited(ToontownGlobals.HoodsForTeleportAll)
 )";
+
+inline const Script kAnimations[] = {
+    {"Dance", danceAnim},
+    {"Fast Dance", fastDanceAnim},
+    {"Neutral", neutralAnim},
+};
+
+inline const Script kCheats[] = {
+    {"Global Teleport", globalTeleport},
+};
+
+inline const Script kTools[] = {
+    {"Skip Phase Check", skipPhaseChk},
+    {"Extract Bytecode", extractBytecode},
+};
+
+inline const Script kButtons[] = {
+    {"Team Legend", teamLegendButtons},
+};
+
+inline const ScriptCategory kCategories[] = {
+    {"Cheats", kCheats, _countof(kCheats)},
+    {"Animations", kAnimations, _countof(kAnimations)},
+    {"Tools", kTools, _countof(kTools)},
+    {"Buttons", kButtons, _countof(kButtons)},
+};
+
+inline const int kCategoryCount = _countof(kCategories);

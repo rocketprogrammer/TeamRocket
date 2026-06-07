@@ -1,2 +1,2 @@
-# TeamRocket
-A remake of the Disney's Toontown Online Python Injector.
+# Team Rocket
+A open source remake of the infamous Python Injector used in Disney's Toontown Online.

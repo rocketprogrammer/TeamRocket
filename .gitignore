@@ -3,3 +3,6 @@
 Debug
 Release
 x64
+imgui/
+minhook/
+*.pyc

@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "injector", "injector.vcxproj", "{6D9607C9-1A00-40BD-9D64-CD6BFCAC860F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "loader", "loader.vcxproj", "{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,14 @@ Global
 		{6D9607C9-1A00-40BD-9D64-CD6BFCAC860F}.Release|Win32.Build.0 = Release|Win32
 		{6D9607C9-1A00-40BD-9D64-CD6BFCAC860F}.Release|x64.ActiveCfg = Release|x64
 		{6D9607C9-1A00-40BD-9D64-CD6BFCAC860F}.Release|x64.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Debug|Win32.Build.0 = Debug|Win32
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Debug|x64.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Debug|x64.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Release|Win32.ActiveCfg = Release|Win32
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Release|Win32.Build.0 = Release|Win32
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Release|x64.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-47A8-9B0C-1D2E3F405162}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
